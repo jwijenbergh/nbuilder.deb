@@ -2,49 +2,50 @@
 
 ## Requirements
 
-devscripts
-build-essential
-apt-cacher-ng
-sbuild
-pkg-php-tools
-dh-golang dh-sysuser apache2-dev
-reprepro
+```bash
+$ sudo apt install devscripts build-essential apt-cacher-ng sbuild pkg-php-tools dh-golang dh-sysuser apache2-dev reprepro
+```
 
-# check dependencies to see if there's anything interesting here
-# sbuild-debian-developer-setup --suite bullseye
+Make sure your user is a member of the `sbuild` group:
 
-sbuild-createchroot \
-	--command-prefix=eatmydata \
-        --include=eatmydata \
-        bullseye \
-        /srv/chroot/bullseye-amd64-sbuild \
-        http://localhost:3142/deb.debian.org/debian
+```bash
+$ sudo usermod -a -G sbuild $(whoami)
+```
 
-sbuild-createchroot \
-        --command-prefix=eatmydata \
-        --components=main,universe \
-        --include=eatmydata \
-        focal \
-        /srv/chroot/focal-amd64-sbuild \
-        http://localhost:3142/archive.ubuntu.com/ubuntu
-
-
-sudo usermod -a -G sbuild $(whoami)
-
-
-
-Generate an RSA 3072 key that expires in 5 years:
+Make sure you have a PGP key, .e.g.:
 
 ```bash
 $ gpg --batch --passphrase '' --quick-generate-key "Debian Packaging Key <debian@example.org>" default default 5y
 ```
 
+## Create Chroots
 
-for ubuntu images:
+### Debian 11
 
-W: Cannot check Release signature; keyring file not available /usr/share/keyrings/ubuntu-archive-keyring.gpg
+```bash
+$ sudo sbuild-createchroot \
+    --command-prefix=eatmydata \
+    --include=eatmydata \
+    bullseye \
+    /srv/chroot/bullseye-amd64-sbuild \
+    http://localhost:3142/deb.debian.org/debian
+```
 
+### Ubuntu 20.04 LTS
 
-The "chroots" are installed under /var/lib/schroot/chroots
+**TODO**: we need to figure out where to get the Ubuntu release key.
 
+```bash
+$ sudo sbuild-createchroot \
+    --command-prefix=eatmydata \
+    --components=main,universe \
+    --include=eatmydata \
+    focal \
+    /srv/chroot/focal-amd64-sbuild \
+    http://localhost:3142/archive.ubuntu.com/ubuntu
+```
 
+## Build, Sign & Repository
+
+Run the build scripts, e.g. `php-saml-sp_v2.sh`. This will build the packages,
+add them to the repository and sign the packages. Ready to be installed.
