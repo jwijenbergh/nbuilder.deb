@@ -21,7 +21,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
                 http://localhost:3142/deb.debian.org/debian
         else
             # update instead
-            sbuild-update -udcar "${SUITE}"
+            sudo sbuild-update -udcar "${SUITE}"
         fi
     elif [ "${DISTRO}" = "ubuntu" ]; then
         if ! [ -d "${CHROOT_DIR}" ]; then
@@ -34,7 +34,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
                 http://localhost:3142/archive.ubuntu.com/ubuntu
         else
             # update instead
-            sbuild-update -udcar "${SUITE}"
+            sudo sbuild-update -udcar "${SUITE}"
         fi
     else
         echo "ERROR: distribution '${DISTRO}' not supported!"
