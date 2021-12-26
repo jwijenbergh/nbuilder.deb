@@ -44,33 +44,11 @@ list the Key ID. You can list the available Key IDs using `gpg -K`.
 
 ## Create Chroots
 
-### Debian 11
+The script `create_update_chroots.sh` can be used to create the _chroots_ and
+update them.
 
-```bash
-$ sudo sbuild-createchroot \
-    --command-prefix=eatmydata \
-    --include=eatmydata \
-    bullseye \
-    /srv/chroot/bullseye-amd64-sbuild \
-    http://localhost:3142/deb.debian.org/debian
-```
-
-### Ubuntu 20.04
-
-**NOTE**: on Debian 11, there is no Ubuntu keyring available anymore to verify 
-the Ubuntu repository files so a warning will be printed. On Debian 10 you can 
-install the `ubuntu-keyring` package. If you are building for Ubuntu as well,
-it is recommended to use Ubuntu to build (all) of your packages.
-
-```bash
-$ sudo sbuild-createchroot \
-    --command-prefix=eatmydata \
-    --components=main,universe \
-    --include=eatmydata \
-    focal \
-    /srv/chroot/focal-amd64-sbuild \
-    http://localhost:3142/archive.ubuntu.com/ubuntu
-```
+Modify `DISTRO_SUITE_LIST` and set the distributions/suites you want and then
+run the script.
 
 ## Build, Sign & Repository
 
