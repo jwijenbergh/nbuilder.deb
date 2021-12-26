@@ -18,6 +18,10 @@ Make sure you have a PGP key, .e.g.:
 $ gpg --batch --passphrase '' --quick-generate-key "Debian Packaging Key <debian@example.org>" default default 5y
 ```
 
+Make sure you have only one (private) key installed, so that one gets picked. 
+If you have multiple, update `SignWith` field in the `.distributions` file to 
+list the Key ID. You can list the available Key IDs using `gpg -K`.
+
 ## Create Chroots
 
 ### Debian 11
@@ -33,7 +37,9 @@ $ sudo sbuild-createchroot \
 
 ### Ubuntu 20.04 LTS
 
-**TODO**: we need to figure out where to get the Ubuntu release key.
+**NOTE**: on Debian 11, there is no key available to verify the Ubuntu 
+repository files so a warning will be printed. On Debian 10 you can install the 
+`ubuntu-keyring` package.
 
 ```bash
 $ sudo sbuild-createchroot \
@@ -47,5 +53,10 @@ $ sudo sbuild-createchroot \
 
 ## Build, Sign & Repository
 
-Run the build scripts, e.g. `php-saml-sp_v2.sh`. This will build the packages,
-add them to the repository and sign the packages. Ready to be installed.
+To change the distributions to build for and make available in the repository, 
+modify the `.distributions` file and also update the `.sh` script by modifying
+the `DISTRO_SUITE_LIST` variable.
+
+Run the `.sh` script to build the packages and add them to the local repository
+in `${HOME}/repos`. The `_upload.sh` script can be used to upload the 
+repository to a remote web server.
