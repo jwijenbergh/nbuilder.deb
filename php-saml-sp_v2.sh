@@ -20,7 +20,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	DISTRO=$(echo ${DISTRO_SUITE} | cut -d '|' -f 1)
 	SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
-	        PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
+		PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
 		PACKAGE_BRANCH=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 2)
 		cd ${TMP_DIR}
 		PACKAGE_NAME=$(basename ${PACKAGE_URL})
