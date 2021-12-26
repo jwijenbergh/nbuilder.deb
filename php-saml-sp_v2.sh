@@ -35,8 +35,14 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 		git checkout -- .
 	done
 
-	for PACKAGE in ${TMP_DIR}/*${SUITE}*.changes; do
-		reprepro -b ${REPO_DIR} include ${SUITE} "${PACKAGE}" || true
+	# binaries
+	for PACKAGE in ${TMP_DIR}/*${SUITE}*.deb; do
+		reprepro -b ${REPO_DIR} includedeb ${SUITE} "${PACKAGE}" || true
+	done
+
+	# sources
+	for PACKAGE in ${TMP_DIR}/*${SUITE}*.dsc; do
+		reprepro -b ${REPO_DIR} includedsc ${SUITE} "${PACKAGE}" || true
 	done
 done
 
