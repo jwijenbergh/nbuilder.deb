@@ -3,6 +3,7 @@
 DISTRO_SUITE_LIST="
 	debian|bullseye
 	ubuntu|focal
+	ubuntu|impish
 "
 
 for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
