@@ -6,13 +6,12 @@ cp $(basename ${0} .sh).distributions ${REPO_DIR}/conf/distributions
 
 DISTRO_SUITE_LIST="
 	debian|bullseye
-	ubuntu|focal
 	ubuntu|impish
 "
 
 PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/php-secookie.deb|v6
-	https://git.sr.ht/~fkooman/php-saml-sp.deb|v2
+	https://git.sr.ht/~fkooman/vpn-ca.deb|main
 "
 
 TMP_DIR=$(mktemp -d)
