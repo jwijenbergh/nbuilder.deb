@@ -2,8 +2,22 @@
 
 ## Requirements
 
+When you are building for Ubuntu as well, it is highly recommended you use 
+Ubuntu to build your packages, including the ones for Debian. Use the latest 
+stable Ubuntu release for this, which at this time of writing is Ubuntu 21.10.
+
 ```bash
-$ sudo apt install devscripts build-essential apt-cacher-ng sbuild pkg-php-tools dh-golang dh-sysuser apache2-dev reprepro
+$ sudo apt install \
+    debian-keyring \
+    devscripts \
+    build-essential \
+    apt-cacher-ng \
+    sbuild \
+    pkg-php-tools \
+    dh-golang \
+    dh-sysuser \
+    apache2-dev \
+    reprepro
 ```
 
 Make sure your user is a member of the `sbuild` group:
@@ -15,7 +29,13 @@ $ sudo usermod -a -G sbuild $(whoami)
 Make sure you have a PGP key, .e.g.:
 
 ```bash
-$ gpg --batch --passphrase '' --quick-generate-key "Debian Packaging Key <debian@example.org>" default default 5y
+$ gpg \
+    --batch \
+    --passphrase '' \
+    --quick-generate-key "Debian Packaging Key <debian@example.org>" \
+    default \
+    default \
+    5y
 ```
 
 Make sure you have only one (private) key installed, so that one gets picked. 
@@ -35,11 +55,12 @@ $ sudo sbuild-createchroot \
     http://localhost:3142/deb.debian.org/debian
 ```
 
-### Ubuntu 20.04 LTS
+### Ubuntu 20.04
 
-**NOTE**: on Debian 11, there is no key available to verify the Ubuntu 
-repository files so a warning will be printed. On Debian 10 you can install the 
-`ubuntu-keyring` package.
+**NOTE**: on Debian 11, there is no Ubuntu keyring available anymore to verify 
+the Ubuntu repository files so a warning will be printed. On Debian 10 you can 
+install the `ubuntu-keyring` package. If you are building for Ubuntu as well,
+it is recommended to use Ubuntu to build (all) of your packages.
 
 ```bash
 $ sudo sbuild-createchroot \
