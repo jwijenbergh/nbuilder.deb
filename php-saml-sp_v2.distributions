@@ -13,3 +13,7 @@ Architectures: amd64 source
 Components: main
 SignWith: default
 
+Codename: jammy
+Architectures: amd64 source
+Components: main
+SignWith: default

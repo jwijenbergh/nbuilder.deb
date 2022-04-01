@@ -8,6 +8,7 @@ DISTRO_SUITE_LIST="
 	debian|bullseye
 	ubuntu|focal
 	ubuntu|impish
+	ubuntu|jammy
 "
 
 PACKAGE_URL_LIST="
