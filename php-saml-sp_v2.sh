@@ -7,7 +7,6 @@ cp $(basename ${0} .sh).distributions ${REPO_DIR}/conf/distributions
 DISTRO_SUITE_LIST="
 	debian|bullseye
 	ubuntu|focal
-	ubuntu|impish
 	ubuntu|jammy
 "
 

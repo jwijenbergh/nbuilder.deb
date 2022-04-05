@@ -8,7 +8,7 @@ stable Ubuntu release for this, which at this time of writing is Ubuntu 21.10.
 
 ```bash
 $ sudo apt install \
-    debian-keyring \
+    debian-archive-keyring \
     devscripts \
     build-essential \
     apt-cacher-ng \

@@ -5,14 +5,30 @@ mkdir -p ${REPO_DIR}/conf
 cp $(basename ${0} .sh).distributions ${REPO_DIR}/conf/distributions
 
 DISTRO_SUITE_LIST="
+	debian|buster
 	debian|bullseye
-	ubuntu|jammy
+	ubuntu|focal
 "
 
-PACKAGE_URL_LIST="
-	https://git.sr.ht/~fkooman/php-secookie.deb|v6
-	https://git.sr.ht/~fkooman/php-oauth2-server.deb|v7
+BASE_PACKAGE_URL_LIST="
+	https://git.sr.ht/~fkooman/php-secookie.deb|main
+	https://git.sr.ht/~fkooman/php-jwt.deb|main
+	https://git.sr.ht/~fkooman/php-oauth2-server.deb|main
+	https://git.sr.ht/~fkooman/php-openvpn-connection-manager.deb|main
+	https://git.sr.ht/~fkooman/php-otp-verifier.deb|main
+	https://git.sr.ht/~fkooman/php-sqlite-migrate.deb|main
 	https://git.sr.ht/~fkooman/vpn-ca.deb|main
+	https://git.sr.ht/~fkooman/vpn-daemon.deb|main
+	https://git.sr.ht/~fkooman/vpn-lib-common.deb|main
+	https://git.sr.ht/~fkooman/vpn-server-api.deb|main
+	https://git.sr.ht/~fkooman/vpn-user-portal.deb|main
+	https://git.sr.ht/~fkooman/vpn-server-node.deb|main
+	https://git.sr.ht/~fkooman/vpn-maint-scripts.deb|main
+"
+
+DEBIAN_PACKAGE_URL_LIST="
+	https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.4.0-1
+	${BASE_PACKAGE_URL_LIST}
 "
 
 TMP_DIR=$(mktemp -d)
@@ -20,6 +36,13 @@ TMP_DIR=$(mktemp -d)
 for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	DISTRO=$(echo ${DISTRO_SUITE} | cut -d '|' -f 1)
 	SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
+
+	if [ "debian" = "${DISTRO}" ]; then
+		PACKAGE_URL_LIST=${DEBIAN_PACKAGE_URL_LIST}
+	else
+		PACKAGE_URL_LIST=${BASE_PACKAGE_URL_LIST}
+	fi
+
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
 		PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
 		PACKAGE_BRANCH=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 2)

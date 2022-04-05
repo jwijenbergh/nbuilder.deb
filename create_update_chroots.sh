@@ -1,9 +1,9 @@
 #!/bin/sh
 
 DISTRO_SUITE_LIST="
+	debian|buster
 	debian|bullseye
 	ubuntu|focal
-	ubuntu|impish
 	ubuntu|jammy
 "
 
