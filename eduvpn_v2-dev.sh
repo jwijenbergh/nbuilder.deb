@@ -23,6 +23,10 @@ BASE_PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/vpn-user-portal.deb|main
 	https://git.sr.ht/~fkooman/vpn-server-node.deb|main
 	https://git.sr.ht/~fkooman/vpn-maint-scripts.deb|main
+	https://git.sr.ht/~fkooman/vpn-portal-artwork-eduVPN.deb|main
+	https://git.sr.ht/~fkooman/vpn-portal-artwork-LC.deb|main
+	https://git.sr.ht/~fkooman/php-saml-sp.deb|main
+	https://git.sr.ht/~fkooman/php-saml-sp-artwork-eduVPN.deb|main
 "
 
 DEBIAN_PACKAGE_URL_LIST="
