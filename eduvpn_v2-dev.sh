@@ -5,16 +5,15 @@ mkdir -p ${REPO_DIR}/conf
 cp $(basename ${0} .sh).distributions ${REPO_DIR}/conf/distributions
 
 DISTRO_SUITE_LIST="
-	debian|buster
 	debian|bullseye
 	ubuntu|focal
+	ubuntu|jammy
 "
 
 BASE_PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/php-secookie.deb|main
 	https://git.sr.ht/~fkooman/php-jwt.deb|main
 	https://git.sr.ht/~fkooman/php-oauth2-server.deb|main
-	https://git.sr.ht/~fkooman/php-openvpn-connection-manager.deb|main
 	https://git.sr.ht/~fkooman/php-otp-verifier.deb|main
 	https://git.sr.ht/~fkooman/php-sqlite-migrate.deb|main
 	https://git.sr.ht/~fkooman/vpn-ca.deb|main
