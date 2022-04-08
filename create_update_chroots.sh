@@ -18,6 +18,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
             sudo sbuild-createchroot \
                 --command-prefix=eatmydata \
                 --include=eatmydata \
+                --extra-repository="deb http://localhost:3142/deb.debian.org/debian ${SUITE}-backports main" \
                 "${SUITE}" \
                 "${CHROOT_DIR}" \
                 http://localhost:3142/deb.debian.org/debian
