@@ -41,23 +41,11 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	SUITE=$(echo "${DISTRO_SUITE}" | cut -d '|' -f 2)
 
     PACKAGE_URL_LIST=${BASE_PACKAGE_URL_LIST}
-    EXTRA_DEP=""
 
 	if [ "debian" = "${DISTRO}" ]; then
 	    # on Debian we need to include php-constant-time as it is not part of 
 	    # the normal repository
 		PACKAGE_URL_LIST=${DEBIAN_EXTRA_PACKAGE_URL_LIST} ${BASE_PACKAGE_URL_LIST}
-
-		# we want to use the backports of Golang on Debian, I have no idea how
-		# to make this less awkward...
-		if [ "bullseye" = "${SUITE}" ]; then
-            # https://packages.debian.org/bullseye/golang-go
-		    EXTRA_DEP="--build-dep-resolver=aptitude --add-depends='golang-go (>= 2:1.16)'"
-	    fi
-		if [ "buster" = "${SUITE}" ]; then
-            # https://packages.debian.org/buster/golang-go
-		    EXTRA_DEP="--build-dep-resolver=aptitude --add-depends='golang-go (>= 2:1.12)'"
-	    fi
     fi
 
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
@@ -70,8 +58,15 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 		cd "${PACKAGE_NAME}" || exit
 		uscan --download-current-version
 		dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
-		git diff 
-		sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ "${EXTRA_DEP}" || exit 1
+		git diff
+		
+		if [ "debian" = "${DISTRO}" ] && [ "buster" = "${SUITE}" ]; then
+			sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ --build-dep-resolver=aptitude --add-depends='golang-go (>= 2:1.12)' || exit 1
+		elif [ "debian" = "${DISTRO}" ] && [ "bullseye" = "${SUITE}" ]; then
+			sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ --build-dep-resolver=aptitude --add-depends='golang-go (>= 2:1.16)' || exit 1
+		else
+			sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ || exit 1
+		fi
 		git checkout -- .
 	done
 
