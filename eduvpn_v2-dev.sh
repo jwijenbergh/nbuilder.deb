@@ -56,7 +56,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 		echo "${PACKAGE_NAME}"
 		git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
 		cd "${PACKAGE_NAME}" || exit
-		uscan --download-current-version
+		uscan --overwrite-download --download-current-version
 		dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
 		git diff
 		
