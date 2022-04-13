@@ -13,6 +13,7 @@ PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/php-secookie.deb|v6
 	https://git.sr.ht/~fkooman/php-oauth2-server.deb|v7
 	https://git.sr.ht/~fkooman/vpn-ca.deb|main
+	https://git.sr.ht/~fkooman/vpn-daemon.deb|v3
 "
 
 TMP_DIR=$(mktemp -d)
