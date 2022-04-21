@@ -19,6 +19,7 @@ PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/vpn-daemon.deb|v3
 	https://git.sr.ht/~fkooman/vpn-user-portal.deb|v3
 	https://git.sr.ht/~fkooman/vpn-server-node.deb|v3
+	https://git.sr.ht/~fkooman/vpn-maint-scripts.deb|v3
 "
 
 TMP_DIR=$(mktemp -d)
