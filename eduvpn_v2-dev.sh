@@ -43,10 +43,10 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
     PACKAGE_URL_LIST=${BASE_PACKAGE_URL_LIST}
 
 	if [ "debian" = "${DISTRO}" ]; then
-	    # on Debian we need to include php-constant-time as it is not part of 
-	    # the normal repository
+		# on Debian we need to include php-constant-time as it is not part of 
+		# the normal repository
 		PACKAGE_URL_LIST=${DEBIAN_EXTRA_PACKAGE_URL_LIST} ${BASE_PACKAGE_URL_LIST}
-    fi
+	fi
 
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
 		PACKAGE_URL=$(echo "${PACKAGE_URL_BRANCH}" | cut -d '|' -f 1)
