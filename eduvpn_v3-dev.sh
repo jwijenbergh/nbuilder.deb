@@ -1,5 +1,7 @@
 #!/bin/sh
 
+set -e -x
+
 REPO_DIR=${HOME}/repos/$(basename ${0} .sh)
 rm -rf "${REPO_DIR}"
 mkdir -p "${REPO_DIR}/conf"
@@ -25,23 +27,27 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	DISTRO=$(echo ${DISTRO_SUITE} | cut -d '|' -f 1)
 	SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
-		cd "${TMP_DIR}"
 		PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
 		PACKAGE_BRANCH=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 2)
 		PACKAGE_NAME=$(basename ${PACKAGE_URL})
-		git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}" || exit 1
-		cd "${PACKAGE_NAME}" || exit 1
+
+		mkdir -p "${TMP_DIR}/${SUITE}"
+		cd "${TMP_DIR}/${SUITE}"
+
+		git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
+		cd "${PACKAGE_NAME}"
 		uscan --overwrite-download --download-current-version
 		dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
+
 		sbuild \
 			-d "${SUITE}" \
 			--no-run-lintian \
-			--extra-package ../ || exit 1
+			--extra-package ../
 
 		git checkout -- .
 	done
 
-	for PACKAGE in ${TMP_DIR}/*${SUITE}*.deb; do
+	for PACKAGE in ${TMP_DIR}/${SUITE}/*${SUITE}*.deb; do
 		echo "Adding ${PACKAGE}..."
 		reprepro -b "${REPO_DIR}" includedeb "${SUITE}" "${PACKAGE}"
 	done
