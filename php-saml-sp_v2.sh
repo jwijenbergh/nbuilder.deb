@@ -1,8 +1,11 @@
 #!/bin/sh
 
+set -e -x
+
 REPO_DIR=${HOME}/repos/$(basename ${0} .sh)
-mkdir -p ${REPO_DIR}/conf
-cp $(basename ${0} .sh).distributions ${REPO_DIR}/conf/distributions
+rm -rf "${REPO_DIR}"
+mkdir -p "${REPO_DIR}/conf"
+cp $(basename ${0} .sh).distributions "${REPO_DIR}/conf/distributions"
 
 DISTRO_SUITE_LIST="
 	debian|bullseye
@@ -23,28 +26,26 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
 		PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
 		PACKAGE_BRANCH=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 2)
-		cd ${TMP_DIR}
 		PACKAGE_NAME=$(basename ${PACKAGE_URL})
-		echo ${PACKAGE_NAME}
-		git clone -b ${PACKAGE_BRANCH} ${PACKAGE_URL}
-		cd ${PACKAGE_NAME} || exit
+
+		mkdir -p "${TMP_DIR}/${SUITE}"
+		cd "${TMP_DIR}/${SUITE}"
+
+		git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
+		cd "${PACKAGE_NAME}"
 		uscan --overwrite-download --download-current-version
-		dch --force-distribution -m -D ${SUITE} -l "+${SUITE}+" ${SUITE}
-		git diff 
-		sbuild -d ${SUITE} --no-run-lintian --extra-package ../ || exit 1
+		dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
+
+		sbuild \
+			-d "${SUITE}" \
+			--no-run-lintian \
+			--extra-package ../
+
 		git checkout -- .
 	done
 
-	# binaries
-	for PACKAGE in ${TMP_DIR}/*${SUITE}*.deb; do
-		reprepro -b ${REPO_DIR} includedeb ${SUITE} "${PACKAGE}" || true
-	done
-
-	# sources
-	for PACKAGE in ${TMP_DIR}/*${SUITE}*.dsc; do
-		reprepro -b ${REPO_DIR} includedsc ${SUITE} "${PACKAGE}" || true
+	for PACKAGE in ${TMP_DIR}/${SUITE}/*${SUITE}*.deb; do
+		echo "Adding ${PACKAGE}..."
+		reprepro -b "${REPO_DIR}" includedeb "${SUITE}" "${PACKAGE}"
 	done
 done
-
-echo "*** DONE ***"
-echo "Result in: ${TMP_DIR}"
