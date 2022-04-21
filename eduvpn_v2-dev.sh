@@ -1,17 +1,20 @@
 #!/bin/sh
 
-REPO_DIR=${HOME}/repos/$(basename "${0}" .sh)
+set -e -x
+
+REPO_DIR=${HOME}/repos/$(basename ${0} .sh)
+rm -rf "${REPO_DIR}"
 mkdir -p "${REPO_DIR}/conf"
-cp "$(basename "${0}" .sh)".distributions "${REPO_DIR}"/conf/distributions
+cp $(basename ${0} .sh).distributions "${REPO_DIR}/conf/distributions"
 
 DISTRO_SUITE_LIST="
-    debian|buster
+	debian|buster
 	debian|bullseye
 	ubuntu|focal
 	ubuntu|jammy
 "
 
-BASE_PACKAGE_URL_LIST="
+PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/php-secookie.deb|main
 	https://git.sr.ht/~fkooman/php-jwt.deb|main
 	https://git.sr.ht/~fkooman/php-oauth2-server.deb|main
@@ -30,56 +33,57 @@ BASE_PACKAGE_URL_LIST="
 	https://git.sr.ht/~fkooman/php-saml-sp-artwork-eduVPN.deb|main
 "
 
-DEBIAN_EXTRA_PACKAGE_URL_LIST="
-	https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.4.0-1
-"
-
 TMP_DIR=$(mktemp -d)
 
 for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
-	DISTRO=$(echo "${DISTRO_SUITE}" | cut -d '|' -f 1)
-	SUITE=$(echo "${DISTRO_SUITE}" | cut -d '|' -f 2)
+	(
+		DISTRO=$(echo ${DISTRO_SUITE} | cut -d '|' -f 1)
+		SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
 
-    PACKAGE_URL_LIST=${BASE_PACKAGE_URL_LIST}
-
-	if [ "debian" = "${DISTRO}" ]; then
-		# on Debian we need to include php-constant-time as it is not part of 
-		# the normal repository
-		PACKAGE_URL_LIST=${DEBIAN_EXTRA_PACKAGE_URL_LIST} ${BASE_PACKAGE_URL_LIST}
-	fi
-
-	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
-		PACKAGE_URL=$(echo "${PACKAGE_URL_BRANCH}" | cut -d '|' -f 1)
-		PACKAGE_BRANCH=$(echo "${PACKAGE_URL_BRANCH}" | cut -d '|' -f 2)
-		cd "${TMP_DIR}" || exit 1
-		PACKAGE_NAME=$(basename "${PACKAGE_URL}")
-		echo "${PACKAGE_NAME}"
-		git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
-		cd "${PACKAGE_NAME}" || exit
-		uscan --overwrite-download --download-current-version
-		dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
-		git diff
-		
-		if [ "debian" = "${DISTRO}" ] && [ "buster" = "${SUITE}" ]; then
-			sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ --build-dep-resolver=aptitude --add-depends='golang-go (>= 2:1.12)' || exit 1
-		elif [ "debian" = "${DISTRO}" ] && [ "bullseye" = "${SUITE}" ]; then
-			sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ --build-dep-resolver=aptitude --add-depends='golang-go (>= 2:1.16)' || exit 1
-		else
-			sbuild -d "${SUITE}" --no-run-lintian --extra-package ../ || exit 1
+		if [ "debian" = "${DISTRO}" ]; then
+			# on Debian we need the "php-constant-time" package as well as it
+			# is not included in the distribution anymore...
+			PACKAGE_URL_LIST="
+				https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.4.0-1
+				${PACKAGE_URL_LIST}
+			"
 		fi
-		git checkout -- .
-	done
 
-	# binaries
-	for PACKAGE in "${TMP_DIR}"/*"${SUITE}"*.deb; do
-		reprepro -b "${REPO_DIR}" includedeb "${SUITE}" "${PACKAGE}" || true
-	done
+		for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
+			PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
+			PACKAGE_BRANCH=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 2)
+			PACKAGE_NAME=$(basename ${PACKAGE_URL})
 
-	# sources
-	for PACKAGE in "${TMP_DIR}"/*"${SUITE}"*.dsc; do
-		reprepro -b "${REPO_DIR}" includedsc "${SUITE}" "${PACKAGE}" || true
-	done
+			mkdir -p "${TMP_DIR}/${SUITE}"
+			cd "${TMP_DIR}/${SUITE}"
+
+			git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
+			cd "${PACKAGE_NAME}"
+			uscan --overwrite-download --download-current-version
+			dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
+
+			if [ "debian" = "${DISTRO}" ] && [ "buster" = "${SUITE}" ]; then
+				# on Debian 10 we want to use a newer version of Go from 
+				# backports!
+				sbuild \
+					-d "${SUITE}" \
+					--no-run-lintian \
+					--extra-package ../ \
+					--build-dep-resolver=aptitude \
+					--add-depends='golang-go (>= 2:1.12)'
+			else
+				sbuild \
+					-d "${SUITE}" \
+					--no-run-lintian \
+					--extra-package ../
+			fi
+
+			git checkout -- .
+		done
+
+		for PACKAGE in ${TMP_DIR}/${SUITE}/*${SUITE}*.deb; do
+			echo "Adding ${PACKAGE}..."
+			reprepro -b "${REPO_DIR}" includedeb "${SUITE}" "${PACKAGE}"
+		done
+	)
 done
-
-echo "*** DONE ***"
-echo "Result in: ${TMP_DIR}"
