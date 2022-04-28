@@ -32,10 +32,10 @@ Make sure you have a PGP key, .e.g.:
 $ gpg \
     --batch \
     --passphrase '' \
-    --quick-generate-key "Debian Packaging Key <debian@example.org>" \
+    --quick-generate-key "Repository Signing Key <me+repo@example.org>" \
     default \
     default \
-    5y
+    10y
 ```
 
 Make sure you have only one (private) key installed, so that one gets picked. 
