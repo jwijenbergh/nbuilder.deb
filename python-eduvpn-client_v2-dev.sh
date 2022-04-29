@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# TODO: figure out what is exactly required, but at least with these 
+# dependencies below installed it works!
+#
+#  373  sudo apt install dh-python
+#  377  sudo apt install sphinx-doc
+#  384  sudo apt install devscripts
+#  402  sudo apt install python3-sphinx
+#  409  sudo apt install python3-wheel
+#  411  sudo apt install python3-pip-whl
+#  414  sudo apt install python3-pip
+#  417  sudo apt install python3-pytest-runner
+
 set -e -x
 
 REPO_DIR=${HOME}/repos/$(basename ${0} .sh)
