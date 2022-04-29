@@ -20,7 +20,9 @@ mkdir -p "${REPO_DIR}/conf"
 cp $(basename ${0} .sh).distributions "${REPO_DIR}/conf/distributions"
 
 DISTRO_SUITE_LIST="
+	debian|buster
 	debian|bullseye
+	ubuntu|focal
 	ubuntu|jammy
 "
 
