@@ -33,10 +33,13 @@ $ gpg \
     --batch \
     --passphrase '' \
     --quick-generate-key "Repository Signing Key <me+repo@example.org>" \
-    default \
+    future-default \
     default \
     10y
 ```
+
+If you use `future-default` instead of `default` in the key generation command 
+it will use Curve 25519 instead of RSA 3072 on Debian/Ubuntu.
 
 Make sure you have only one (private) key installed, so that one gets picked. 
 If you have multiple, update `SignWith` field in the `.distributions` file to 
