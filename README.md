@@ -34,7 +34,7 @@ $ gpg \
     --passphrase '' \
     --quick-generate-key "Repository Signing Key <me+repo@example.org>" \
     future-default \
-    default \
+    sign \
     10y
 ```
 
