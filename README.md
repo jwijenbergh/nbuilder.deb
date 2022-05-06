@@ -45,6 +45,16 @@ Make sure you have only one (private) key installed, so that one gets picked.
 If you have multiple, update `SignWith` field in the `.distributions` file to 
 list the Key ID. You can list the available Key IDs using `gpg -K`.
 
+You can export your key for import in the Debian / Ubuntu system that will 
+install your packages like this:
+
+```
+$ gpg --output me+repo@example.org.gpg --export me+repo@example.org
+```
+
+On the system using the package repository, place this file in 
+`/etc/apt/trusted.gpg.d`.
+
 ## Create Chroots
 
 The script `create_update_chroots.sh` can be used to create the _chroots_ and
