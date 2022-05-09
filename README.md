@@ -4,7 +4,7 @@
 
 When you are building for Ubuntu as well, it is highly recommended you use 
 Ubuntu to build your packages, including the ones for Debian. Use the latest 
-stable Ubuntu release for this, which at this time of writing is Ubuntu 21.10.
+stable Ubuntu release for this, which at this time of writing is Ubuntu 22.04.
 
 ```bash
 $ sudo apt install \
@@ -63,6 +63,10 @@ update them.
 Modify `DISTRO_SUITE_LIST` and set the distributions/suites you want and then
 run the script.
 
+```bash
+$ ./create_update_chroots.sh
+```
+
 ## Build, Sign & Repository
 
 To change the distributions to build for and make available in the repository, 
@@ -71,4 +75,4 @@ the `DISTRO_SUITE_LIST` variable.
 
 Run the `.sh` script to build the packages and add them to the local repository
 in `${HOME}/repos`. The `_upload.sh` script can be used to upload the 
-repository to a remote web server.
+repository to a remote web server. Modify to point to your own server.
