@@ -67,14 +67,12 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 				# backports!
 				sbuild \
 					-d "${SUITE}" \
-					--no-run-lintian \
 					--extra-package ../ \
 					--build-dep-resolver=aptitude \
 					--add-depends='golang-go (>= 2:1.12)'
 			else
 				sbuild \
 					-d "${SUITE}" \
-					--no-run-lintian \
 					--extra-package ../
 			fi
 

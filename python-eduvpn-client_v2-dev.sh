@@ -50,7 +50,6 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 
 		sbuild \
 			-d "${SUITE}" \
-			--no-run-lintian \
 			--extra-package ../
 
 		git checkout -- .
