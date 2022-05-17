@@ -17,7 +17,8 @@ $ sudo apt install \
     dh-golang \
     dh-sysuser \
     apache2-dev \
-    reprepro
+    reprepro \
+    git-buildpackage
 ```
 
 Make sure your user is a member of the `sbuild` group:
