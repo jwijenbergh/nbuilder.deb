@@ -62,9 +62,9 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 			uscan --overwrite-download --download-current-version
 			dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
 
+			# on Debian 10 we want to use a newer version of Go 
+			# from backports!
 			if [ "debian" = "${DISTRO}" ] && [ "buster" = "${SUITE}" ]; then
-				# on Debian 10 we want to use a newer version of Go from 
-				# backports!
 				sbuild \
 					-d "${SUITE}" \
 					--extra-package ../ \
