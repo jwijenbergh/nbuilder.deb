@@ -82,7 +82,8 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 					-d "${SUITE}" \
 					--extra-package ../ \
 					--build-dep-resolver=aptitude \
-					--add-depends='pkg-php-tools (>> 1.40)'
+					--add-depends='pkg-php-tools (>> 1.40)' \
+					--add-depends='golang-go (>> 2:1.15)'
 			else
 				sbuild \
 					-d "${SUITE}" \
