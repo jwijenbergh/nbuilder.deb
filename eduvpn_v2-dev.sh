@@ -41,12 +41,19 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 		SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
 
 		if [ "debian" = "${DISTRO}" ]; then
-			# on Debian we need the "php-constant-time" package as well as it
-			# is not included in the distribution anymore...
-			PACKAGE_URL_LIST="
-				https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.4.0-1
-				${PACKAGE_URL_LIST}
-			"
+			# on Debian we need php-constant-time as it is not
+			# part of the distribution...
+			if [ "buster" = "${SUITE}" ]; then
+				PACKAGE_URL_LIST="
+					https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.4.0-1
+					${PACKAGE_URL_LIST}
+				"
+			elif [ "bullseye" = "${SUITE}" ]; then
+				PACKAGE_URL_LIST="
+					https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.6.3-1
+					${PACKAGE_URL_LIST}
+				"
+			fi
 		fi
 
 		for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
@@ -69,7 +76,13 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 					-d "${SUITE}" \
 					--extra-package ../ \
 					--build-dep-resolver=aptitude \
-					--add-depends='golang-go (>= 2:1.12)'
+					--add-depends='golang-go (>> 2:1.11)'
+			elif [ "debian" = "${DISTRO}" ] && [ "bullseye" = "${SUITE}" ]; then
+				sbuild \
+					-d "${SUITE}" \
+					--extra-package ../ \
+					--build-dep-resolver=aptitude \
+					--add-depends='pkg-php-tools (>> 1.40)'
 			else
 				sbuild \
 					-d "${SUITE}" \
