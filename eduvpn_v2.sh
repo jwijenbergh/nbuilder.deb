@@ -92,7 +92,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 			git checkout -- .
 		done
 
-		for PACKAGE in ${TMP_DIR}/${SUITE}/*${SUITE}*.deb; do
+		for PACKAGE in ${TMP_DIR}/${SUITE}/*+${VERSION}+*.deb; do
 			echo "Adding ${PACKAGE}..."
 			reprepro -b "${REPO_DIR}" includedeb "${SUITE}" "${PACKAGE}"
 		done
