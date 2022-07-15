@@ -7,11 +7,16 @@ rm -rf "${REPO_DIR}"
 mkdir -p "${REPO_DIR}/conf"
 cp $(basename ${0} .sh).distributions "${REPO_DIR}/conf/distributions"
 
+#DISTRO_SUITE_LIST="
+#	debian|buster|deb10
+#	debian|bullseye|deb11
+#	ubuntu|focal|ubt20.04
+#	ubuntu|jammy|ubt22.04
+#"
+
 DISTRO_SUITE_LIST="
-	debian|buster
-	debian|bullseye
-	ubuntu|focal
-	ubuntu|jammy
+	debian|buster|deb10
+	debian|bullseye|deb11
 "
 
 PACKAGE_URL_LIST="
@@ -39,6 +44,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	(
 		DISTRO=$(echo ${DISTRO_SUITE} | cut -d '|' -f 1)
 		SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
+		VERSION=$(echo ${DISTRO_SUITE} | cut -d '|' -f 3)
 
 		if [ "debian" = "${DISTRO}" ]; then
 			# on Debian we need php-constant-time as it is not
@@ -67,10 +73,10 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 			git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
 			cd "${PACKAGE_NAME}"
 			uscan --overwrite-download --download-current-version
-			dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
+			dch --force-distribution -m -D "${SUITE}" -l "+${VERSION}+" "${SUITE}"
 
-			# on Debian 10 we want to use a newer version of Go 
-			# from backports!
+			# on Debian 10 and 11 we want to use a newer version of
+			# Go from backports
 			if [ "debian" = "${DISTRO}" ] && [ "buster" = "${SUITE}" ]; then
 				sbuild \
 					-d "${SUITE}" \
