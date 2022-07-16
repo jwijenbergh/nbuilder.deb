@@ -8,8 +8,8 @@ mkdir -p "${REPO_DIR}/conf"
 cp $(basename ${0} .sh).distributions "${REPO_DIR}/conf/distributions"
 
 DISTRO_SUITE_LIST="
-	debian|bullseye
-	ubuntu|jammy
+	debian|bullseye|debian+11
+	ubuntu|jammy|ubuntu+22.04
 "
 
 PACKAGE_URL_LIST="
@@ -29,6 +29,7 @@ TMP_DIR=$(mktemp -d)
 for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 	DISTRO=$(echo ${DISTRO_SUITE} | cut -d '|' -f 1)
 	SUITE=$(echo ${DISTRO_SUITE} | cut -d '|' -f 2)
+	VERSION=$(echo ${DISTRO_SUITE} | cut -d '|' -f 3)
 	for PACKAGE_URL_BRANCH in ${PACKAGE_URL_LIST}; do
 		PACKAGE_URL=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 1)
 		PACKAGE_BRANCH=$(echo ${PACKAGE_URL_BRANCH} | cut -d '|' -f 2)
@@ -40,16 +41,25 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 		git clone -b "${PACKAGE_BRANCH}" "${PACKAGE_URL}"
 		cd "${PACKAGE_NAME}"
 		uscan --overwrite-download --download-current-version
-		dch --force-distribution -m -D "${SUITE}" -l "+${SUITE}+" "${SUITE}"
+		dch --force-distribution -m -D "${SUITE}" -l "+${VERSION}+" "${SUITE}"
 
-		sbuild \
-			-d "${SUITE}" \
-			--extra-package ../
+		if [ "debian" = "${DISTRO}" ] && [ "bullseye" = "${SUITE}" ]; then
+			sbuild \
+				-d "${SUITE}" \
+				--extra-package ../ \
+				--build-dep-resolver=aptitude \
+				--add-depends='pkg-php-tools (>> 1.40)' \
+				--add-depends='golang-go (>> 2:1.15)'
+		else
+		    sbuild \
+			    -d "${SUITE}" \
+			    --extra-package ../
+        fi
 
 		git checkout -- .
 	done
 
-	for PACKAGE in ${TMP_DIR}/${SUITE}/*${SUITE}*.deb; do
+	for PACKAGE in ${TMP_DIR}/${SUITE}/*+${VERSION}+*.deb; do
 		echo "Adding ${PACKAGE}..."
 		reprepro -b "${REPO_DIR}" includedeb "${SUITE}" "${PACKAGE}"
 	done
