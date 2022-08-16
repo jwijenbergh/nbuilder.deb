@@ -1,9 +1,9 @@
 Codename: bullseye
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: repo+v3@eduvpn.org
 
 Codename: jammy
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: repo+v3@eduvpn.org

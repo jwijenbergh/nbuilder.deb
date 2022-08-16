@@ -1,9 +1,9 @@
 Codename: buster
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: debian+20200817@eduvpn.org
 
 Codename: bullseye
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: debian+20200817@eduvpn.org

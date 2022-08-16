@@ -1,19 +1,19 @@
 Codename: buster
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: fkooman+repo@tuxed.net
 
 Codename: bullseye
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: fkooman+repo@tuxed.net
 
 Codename: focal
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: fkooman+repo@tuxed.net
 
 Codename: jammy
 Architectures: amd64 source
 Components: main
-SignWith: default
+SignWith: fkooman+repo@tuxed.net
