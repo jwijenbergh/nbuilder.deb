@@ -77,3 +77,19 @@ the `DISTRO_SUITE_LIST` variable.
 Run the `.sh` script to build the packages and add them to the local repository
 in `${HOME}/repos`. The `_upload.sh` script can be used to upload the 
 repository to a remote web server. Modify to point to your own server.
+
+## Updating Packages
+
+### Environment
+
+Make sure the variables `DEBFULLNAME` and `DEBEMAIL` are set. This makes sure 
+`dch` below uses this information to update the `debian/changelog` file. Add 
+this to the bottom of `${HOME}/.profile`:
+
+```bash
+export DEBFULLNAME="François Kooman"
+export DEBEMAIL=fkooman@deic.dk
+```
+
+After this make sure you logout and in again.
+
