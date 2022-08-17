@@ -78,6 +78,19 @@ Run the `.sh` script to build the packages and add them to the local repository
 in `${HOME}/repos`. The `_upload.sh` script can be used to upload the 
 repository to a remote web server. Modify to point to your own server.
 
+Do not forget to modify the `.distributions` file to set the `SignWith` field 
+to point to your key, e.g.:
+
+```
+SignWith: me+repo@example.org
+```
+
+To run the builder, you can use e.g.:
+
+```
+$ ./eduvpn_v3.sh
+```
+
 ## Updating Packages
 
 ### Environment
@@ -93,3 +106,63 @@ export DEBEMAIL=fkooman@deic.dk
 
 After this make sure you logout and in again.
 
+### Updating
+
+In order to update a package, you can use the following commands, if necessary
+first fork the repository to a place where you can "push" to:
+
+```bash
+$ git clone git@git.sr.ht:~fkooman/vpn-user-portal.deb
+```
+
+We need to make the `upstream` branch available locally, not sure how to do
+that properly, but this works:
+
+```bash
+$ git checkout upstream
+$ git checkout v3
+```
+
+Download the latest upstream tar release and verify the signature:
+
+```bash
+$ uscan
+```
+
+Import the new release in the Git repository:
+
+```bash
+$ gbp import-orig ../vpn-user-portal_3.0.5.orig.tar.xz
+```
+
+Update the `debian/changelog` file. Your editor will be opened.
+
+```bash
+$ dch -v 3.0.5-1
+```
+
+The update message could be "update to 3.0.5". If you make any other changes to
+the package, note them here as well. Finalize the changes:
+
+```bash
+$ dch -r --distribution unstable
+```
+
+Review the changes:
+
+```bash
+$ git diff
+```
+
+If all looks good, commit and push the changes:
+
+```bash
+$ git commit -a -m 'update to 3.0.5'
+```
+
+Now push all branches/tags to the server:
+
+```bash
+$ git push origin --all
+$ git push origin --tags
+```
