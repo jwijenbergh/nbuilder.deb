@@ -44,7 +44,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 			# part of the distribution...
 			if [ "buster" = "${SUITE}" ]; then
 				PACKAGE_URL_LIST="
-					https://salsa.debian.org/php-team/pear/php-constant-time|debian/2.4.0-1
+					https://git.sr.ht/~fkooman/php-constant-time.deb|2.x
 					${PACKAGE_URL_LIST}
 				"
 			elif [ "bullseye" = "${SUITE}" ]; then
