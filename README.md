@@ -25,6 +25,7 @@ Make sure your user is a member of the `sbuild` group:
 
 ```bash
 $ sudo usermod -a -G sbuild $(whoami)
+$ newgrp sbuild
 ```
 
 Make sure you have a PGP key, .e.g.:
