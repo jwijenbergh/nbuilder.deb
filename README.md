@@ -56,6 +56,14 @@ $ gpg --output me+repo@example.org.gpg --export me+repo@example.org
 On the system using the package repository, place this file in 
 `/etc/apt/trusted.gpg.d`.
 
+## Clone Repository
+
+```bash
+$ git clone https://git.sr.ht/~fkooman/nbuilder.deb
+```
+
+All commands below are executed _inside_ the `nbuilder.deb` folder.
+
 ## Create Chroots
 
 The script `create_update_chroots.sh` can be used to create the _chroots_ and
@@ -92,6 +100,9 @@ $ ./eduvpn_v3.sh
 ```
 
 ## Updating Packages
+
+**NOTE**: only do this if you want to package newer versions of the software,
+NOT run the builder.
 
 ### Environment
 
