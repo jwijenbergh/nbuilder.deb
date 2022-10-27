@@ -79,24 +79,31 @@ $ ./create_update_chroots.sh
 ## Build, Sign & Repository
 
 To change the distributions to build for and make available in the repository, 
-modify the `.distributions` file and also update the `.sh` script by modifying
-the `DISTRO_SUITE_LIST` variable.
+modify the `.distributions` file for the software you want to build, e.g. 
+`eduvpn_v3.distributions`. Also modify the shell script, e.g. `eduvpn_v3.sh` by 
+modifying the `DISTRO_SUITE_LIST` variable.
 
-Run the `.sh` script to build the packages and add them to the local repository
+Run the shell script to build the packages and add them to the local repository
 in `${HOME}/repos`. The `_upload.sh` script can be used to upload the 
 repository to a remote web server. Modify to point to your own server.
 
-Do not forget to modify the `.distributions` file to set the `SignWith` field 
-to point to your key, e.g.:
+Also, do NOT forget to modify the `.distributions` file to set the `SignWith` 
+field to point to your key, e.g.:
 
 ```
 SignWith: me+repo@example.org
 ```
 
-To run the builder, you can use e.g.:
+To run the builder:
 
 ```
 $ ./eduvpn_v3.sh
+```
+
+To start the repository upload:
+
+```
+$ ./eduvpn_v3_upload.sh
 ```
 
 ## Updating Packages
