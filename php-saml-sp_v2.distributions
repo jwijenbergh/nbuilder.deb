@@ -1,14 +1,14 @@
 Codename: bullseye
-Architectures: amd64 source
+Architectures: amd64 arm64 source
 Components: main
 SignWith: fkooman+repo@tuxed.net
 
 Codename: focal
-Architectures: amd64 source
+Architectures: amd64 arm64 source
 Components: main
 SignWith: fkooman+repo@tuxed.net
 
 Codename: jammy
-Architectures: amd64 source
+Architectures: amd64 arm64 source
 Components: main
 SignWith: fkooman+repo@tuxed.net

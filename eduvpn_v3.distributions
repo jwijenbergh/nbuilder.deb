@@ -1,9 +1,9 @@
 Codename: bullseye
-Architectures: amd64 source
+Architectures: amd64 arm64 source
 Components: main
 SignWith: repo+v3@eduvpn.org
 
 Codename: jammy
-Architectures: amd64 source
+Architectures: amd64 arm64 source
 Components: main
 SignWith: repo+v3@eduvpn.org
