@@ -8,10 +8,10 @@ mkdir -p "${REPO_DIR}/conf"
 cp $(basename ${0} .sh).distributions "${REPO_DIR}/conf/distributions"
 
 DISTRO_SUITE_LIST="
-	debian|buster|deb10
-	debian|bullseye|deb11
-	ubuntu|focal|ubt20.04
-	ubuntu|jammy|ubt22.04
+	debian|buster|debian+10
+	debian|bullseye|debian+11
+	ubuntu|focal|ubuntu+20.04
+	ubuntu|jammy|ubuntu+22.04
 "
 
 PACKAGE_URL_LIST="
