@@ -22,6 +22,14 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
                 "${SUITE}" \
                 "${CHROOT_DIR}" \
                 http://localhost:3142/deb.debian.org/debian
+            # install Go from backports
+            sudo sbuild-update -u "${SUITE}"
+            sudo sbuild-apt "${SUITE}" apt-get install golang-go/${SUITE}-backports golang-src/${SUITE}-backports
+            if [ "${SUITE}" = "bullseye" ]; then
+                # on bullseye, install pkg-php-tools from backports, I forgot why...
+                sudo sbuild-apt "${SUITE}" apt-get install pkg-php-tools/${SUITE}-backports
+            fi
+            sudo sbuild-update -udcar "${SUITE}"
         else
             # update instead
             sudo sbuild-update -udcar "${SUITE}"
