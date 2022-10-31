@@ -43,18 +43,9 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 		uscan --overwrite-download --download-current-version
 		dch --force-distribution -m -D "${SUITE}" -l "+${VERSION}+" "${SUITE}"
 
-		if [ "debian" = "${DISTRO}" ] && [ "bullseye" = "${SUITE}" ]; then
-			sbuild \
-				-d "${SUITE}" \
-				--extra-package ../ \
-				--build-dep-resolver=aptitude \
-				--add-depends='pkg-php-tools (>> 1.40)' \
-				--add-depends='golang-go (>> 2:1.15)'
-		else
-		    sbuild \
-			    -d "${SUITE}" \
-			    --extra-package ../
-        fi
+		sbuild \
+			-d "${SUITE}" \
+			--extra-package ../
 
 		git checkout -- .
 	done
