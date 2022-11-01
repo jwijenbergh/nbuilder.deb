@@ -70,6 +70,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
 
 			sbuild \
 				-d "${SUITE}" \
+				--build-dep-resolver=aptitude \
 				--extra-package ../
 
 			git checkout -- .
