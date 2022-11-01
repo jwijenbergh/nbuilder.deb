@@ -17,7 +17,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
         if ! [ -d "${CHROOT_DIR}" ]; then
             sudo sbuild-createchroot \
                 --command-prefix=eatmydata \
-                --include=eatmydata,aptitude,lintian \
+                --include=eatmydata,aptitude \
                 --extra-repository="deb http://localhost:3142/deb.debian.org/debian ${SUITE}-backports main" \
                 "${SUITE}" \
                 "${CHROOT_DIR}" \
@@ -39,7 +39,7 @@ for DISTRO_SUITE in ${DISTRO_SUITE_LIST}; do
             sudo sbuild-createchroot \
                 --command-prefix=eatmydata \
                 --components=main,universe \
-                --include=eatmydata,aptitude,lintian \
+                --include=eatmydata,aptitude \
                 "${SUITE}" \
                 "${CHROOT_DIR}" \
                 http://localhost:3142/archive.ubuntu.com/ubuntu
