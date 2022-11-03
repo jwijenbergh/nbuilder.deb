@@ -1,0 +1,29 @@
+Codename: jammy
+Architectures: amd64 arm64 source
+Components: main
+SignWith: app+linux@eduvpn.org
+
+Codename: focal
+Architectures: amd64 arm64 source
+Components: main
+SignWith: app+linux@eduvpn.org
+
+Codename: bionic
+Architectures: amd64 arm64 source
+Components: main
+SignWith: app+linux@eduvpn.org
+
+Codename: buster
+Architectures: amd64 arm64 source
+Components: main
+SignWith: app+linux@eduvpn.org
+
+Codename: bullseye
+Architectures: amd64 arm64 source
+Components: main
+SignWith: app+linux@eduvpn.org
+
+Codename: stable
+Architectures: amd64 arm64 source
+Components: main
+SignWith: app+linux@eduvpn.org
